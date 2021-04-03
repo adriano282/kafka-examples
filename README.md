@@ -1,7 +1,12 @@
 # kafka-examples
 
 ### How to run 
-cd kafka-examples && docker-compose up -d
+```cd kafka-examples && docker-compose up -d```
 
 #### Starting the producer
-./gradlew kafka-producer:bootRun
+```./gradlew kafka-producer:bootRun```
+
+##### Sending Messages
+```
+curl -X POST http://localhost:8080/vehicle-coordinate/publish -H 'Content-Type: application/json' --data '{ "x_coordinate" : 10, "y_coordinate" : 15, "vehicle_price" : 15600.50 }'
+```

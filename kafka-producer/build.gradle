@@ -1,0 +1,112 @@
+buildscript {
+	repositories {
+		maven { url 'https://plugins.gradle.org/m2/' }
+	}
+	dependencies {
+		//plugin needed to generate POJO from Avro schema
+		classpath("com.commercehub.gradle.plugin:gradle-avro-plugin:0.14.2")
+	}
+}
+
+plugins {
+	id 'org.springframework.boot' version '2.4.4'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	//id "com.github.davidmc24.gradle.plugin.avro" version "1.1.0"
+}
+
+apply plugin: "com.commercehub.gradle.plugin.avro-base"
+
+group = 'com.kafkaexample'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+// Here is a great article about how to configure a new test source:
+// https://www.petrikainulainen.net/programming/gradle/getting-started-with-gradle-integration-testing/
+sourceSets {
+	integrationTest {
+		java {
+			compileClasspath += main.output + test.output
+			runtimeClasspath += main.output + test.output
+			srcDir file('src/integrationTest/java')
+		}
+		resources.srcDir file('src/integrationTest/resources')
+	}
+}
+
+configurations {
+	integrationTestImplementation.extendsFrom testImplementation
+	integrationTestCompile.extendsFrom testCompile
+	integrationTestRuntime.extendsFrom testRuntime
+}
+
+task integrationTest(type: Test) {
+	group 'Verification'
+	description 'Runs the integration test'
+	testClassesDirs = sourceSets.integrationTest.output.classesDirs
+	classpath = sourceSets.integrationTest.runtimeClasspath
+	outputs.upToDateWhen { false }
+
+}
+
+check.dependsOn integrationTest
+integrationTest.mustRunAfter test
+
+repositories {
+	maven {
+		url "https://packages.confluent.io/maven/"
+	}
+	mavenCentral()
+}
+
+ext {
+	avroVersion = "1.10.2"
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.kafka:spring-kafka'
+	implementation 'junit:junit:4.12'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
+
+	// https://mvnrepository.com/artifact/org.apache.avro/avro
+	compile group: 'org.apache.avro', name: 'avro', version: '1.10.2'
+
+    // https://mvnrepository.com/artifact/io.confluent/kafka-avro-serializer
+	implementation group: 'io.confluent', name: 'kafka-avro-serializer', version: '6.1.1'
+
+	// https://mvnrepository.com/artifact/io.confluent/kafka-streams-avro-serde
+	implementation('io.confluent:kafka-streams-avro-serde:6.1.1') {
+		exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+	}
+
+	compileOnly 'org.projectlombok:lombok:1.18.20'
+	annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+	testCompileOnly 'org.projectlombok:lombok:1.18.20'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+	integrationTestImplementation sourceSets.main.output
+	integrationTestImplementation configurations.testImplementation
+	integrationTestImplementation sourceSets.test.output
+	integrationTestRuntimeOnly configurations.testRuntimeOnly
+}
+
+test {
+	useJUnitPlatform()
+}
+
+
+task generateAvro(type: com.commercehub.gradle.plugin.avro.GenerateAvroJavaTask) {
+
+	//point plugin to folder with avro schemas
+	source("src/avro")
+	//point plugin to folder with generated POJOs
+	outputDir = file("src/main/java")
+}
+
+compileJava.source(generateAvro.outputs)
+
+

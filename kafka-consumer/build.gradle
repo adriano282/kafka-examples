@@ -12,7 +12,6 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 }
-
 apply plugin: "com.commercehub.gradle.plugin.avro-base"
 
 group = 'com.kafkaexample'
@@ -25,6 +24,10 @@ repositories {
 	}
 
 	mavenCentral()
+}
+
+ext {
+	avroVersion = "1.10.2"
 }
 
 dependencies {
@@ -61,7 +64,6 @@ test {
 }
 
 task generateAvro(type: com.commercehub.gradle.plugin.avro.GenerateAvroJavaTask) {
-
 	//point plugin to folder with avro schemas
 	source("src/avro")
 	//point plugin to folder with generated POJOs
@@ -69,3 +71,4 @@ task generateAvro(type: com.commercehub.gradle.plugin.avro.GenerateAvroJavaTask)
 }
 
 compileJava.source(generateAvro.outputs)
+generateAvro.mustRunAfter clean

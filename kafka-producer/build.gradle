@@ -1,3 +1,5 @@
+import com.commercehub.gradle.plugin.avro.GenerateAvroJavaTask
+
 buildscript {
 	repositories {
 		maven { url 'https://plugins.gradle.org/m2/' }
@@ -99,14 +101,13 @@ test {
 }
 
 
-task generateAvro(type: com.commercehub.gradle.plugin.avro.GenerateAvroJavaTask) {
-
+task generateAvro(type: GenerateAvroJavaTask) {
 	//point plugin to folder with avro schemas
 	source("src/avro")
 	//point plugin to folder with generated POJOs
 	outputDir = file("src/main/java")
+
 }
 
 compileJava.source(generateAvro.outputs)
-
-
+generateAvro.mustRunAfter clean

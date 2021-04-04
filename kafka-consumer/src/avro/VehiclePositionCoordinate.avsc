@@ -1,0 +1,35 @@
+{
+    "type" : "record",
+    "namespace" : "avro.vehicle.tracker",
+    "name" : "VehiclePositionCoordinate",
+    "version" : "0",
+    "doc": "This as Record that represents the geography coordinate of a vehicle",
+    "fields"  : [
+        {
+            "name" : "vehicle_uuid",
+            "type" : "string",
+            "doc"  : "It's the vehicle system unique identification on the format UUID"
+        },
+        {
+            "name" : "x_coordinate",
+            "type" : "int",
+            "doc"  : "It's the x geography coordinate position of the tracked vehicle"
+        },
+        {
+            "name" : "y_coordinate",
+            "type" : "int",
+            "doc"  : "It's the y geography coordinate position of the tracked vehicle"
+        },
+        {
+            "name" : "vehicle_description",
+            "type" : ["null", "string"],
+            "doc"  : "It's the vehicle brief description. Ex.: Chevrolet sedan four doors. It's optional"
+        }, // Optional field
+        {
+            "name" : "vehicle_price",
+            "type" : "int",
+            "doc"  : "It's the current vehicle's price. The last two number are the cents. Ex.: A price R$ 9.400,95 will be 940095. A price R$ 9.000 wil be 900000."
+        }
+
+    ]
+}

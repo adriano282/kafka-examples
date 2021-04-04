@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,10 +19,10 @@ public class KafkaProducer {
     @Value("${topic.name}")
     private String topic;
 
-    private final KafkaTemplate<String, VehiclePositionCoordinate> kafkaTemplate;
+    private final KafkaTemplate kafkaTemplate;
 
     @Autowired
-    public KafkaProducer(KafkaTemplate<String, VehiclePositionCoordinate> kafkaTemplate) {
+    public KafkaProducer(KafkaTemplate kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 

@@ -10,7 +10,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
+//@EqualsAndHashCode
 public class VehiclePositionCoordinateDTO {
     private Integer x_coordinate;
     private Integer y_coordinate;

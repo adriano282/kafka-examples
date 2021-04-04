@@ -32,7 +32,7 @@ public class KafkaProducerConfig {
     @Value("${spring.kafka.producer.value-serializer}")
     private String VALUE_SERIALIZER_CLASS_CONFIG;
 
-    @Value("${spring.kafka.producer.properties.schema.registry.url")
+    @Value("${spring.kafka.producer.properties.schema.registry.url}")
     private String SCHEMA_REGISTRY_CONFIG;
 
     @Value("${spring.kafka.producer.linger_ms}")

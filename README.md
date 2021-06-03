@@ -4,7 +4,7 @@
 ```cd kafka-examples && docker-compose up -d```
 
 #### Starting the producer
-```./gradlew kafka-producer:bootRun```
+```cd kafka-producer && ./gradlew bootRun```
 
 ##### Sending Messages
 ```
@@ -12,7 +12,7 @@ curl -X POST http://localhost:8080/vehicle-coordinate/publish -H 'Content-Type: 
 ```
 
 #### Starting the Consumer
-```./gradlew kafka-consumer:bootRun```
+```cd kafka-consumer && ./gradlew bootRun```
 
 #### Seeing the messages in Topics:
 

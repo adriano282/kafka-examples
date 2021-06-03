@@ -1,10 +1,8 @@
-package com.kafkaexample.consumer;
+package com.kafkaexample.consumer.message;
 
 import avro.vehicle.tracker.VehiclePositionCoordinate;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -16,9 +14,6 @@ import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.*;
 import org.springframework.kafka.listener.adapter.RetryingMessageListenerAdapter;
 import org.springframework.retry.support.RetryTemplate;
-import org.springframework.stereotype.Component;
-import org.springframework.util.backoff.BackOff;
-import org.springframework.util.backoff.ExponentialBackOff;
 import org.springframework.util.backoff.FixedBackOff;
 
 import java.util.HashMap;
@@ -32,35 +27,15 @@ public class KafkaConsumerConfig {
 
     private static final Logger LOGGER = Logger.getLogger(KafkaConsumerConfig.class.toString());
 
-    @Value("${spring.kafka.consumer.bootstrap-servers}")
-    private String BOOTSTRAP_SERVER_CONFIG;
+    private MessageConsumerProps messageConsumerProps;
 
-    @Value("${spring.kafka.consumer.key-deserializer}")
-    private String KEY_DESERIALIZER_CLASS_CONFIG;
-
-    @Value("${spring.kafka.consumer.value-deserializer}")
-    private String VALUE_DESERIALIZER_CLASS_CONFIG;
-
-    @Value("${spring.kafka.consumer.properties.schema.registry.url}")
-    private String SCHEMA_REGISTRY_CONFIG;
-
-
-    @Bean
-    public ConsumerFactory consumerFactory() { return new DefaultKafkaConsumerFactory(consumerProps()); }
-
-
-    private Map<String, Object> consumerProps() {
-        Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER_CONFIG);
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, KEY_DESERIALIZER_CLASS_CONFIG);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, VALUE_DESERIALIZER_CLASS_CONFIG);
-
-        props.put("specific.avro.reader", true);
-        props.put("auto.offset.reset", "earliest");
-        props.put("schema.registry.url", SCHEMA_REGISTRY_CONFIG);
-        return props;
+    @Autowired
+    public KafkaConsumerConfig(MessageConsumerProps messageConsumerProps) {
+        this.messageConsumerProps = messageConsumerProps;
     }
 
+    @Bean
+    public ConsumerFactory consumerFactory() { return new DefaultKafkaConsumerFactory(messageConsumerProps.values()); }
 
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<Integer, VehiclePositionCoordinate>>
@@ -68,6 +43,7 @@ public class KafkaConsumerConfig {
         ConcurrentKafkaListenerContainerFactory<Integer, VehiclePositionCoordinate> factory =
                 new ConcurrentKafkaListenerContainerFactory<Integer, VehiclePositionCoordinate>();
         factory.setConsumerFactory(consumerFactory());
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
         return factory;
     }
 
@@ -83,6 +59,7 @@ public class KafkaConsumerConfig {
                         new DeadLetterPublishingRecoverer(
                                 (KafkaOperations<Integer, VehiclePositionCoordinate>) kafkaTemplate), new FixedBackOff(2000L, 2)));
         factory.setConsumerFactory(consumerFactory());
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
 
         return factory;
     }
@@ -109,6 +86,7 @@ public class KafkaConsumerConfig {
                     return Optional.empty();
                 }
         );
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
         return factory;
     }
 

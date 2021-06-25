@@ -30,7 +30,8 @@ public class KafkaConsumerBachConfig {
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<Integer, VehiclePositionCoordinate>> batchListenerConfig(){
         ConcurrentKafkaListenerContainerFactory<Integer, VehiclePositionCoordinate> factory =
                 new ConcurrentKafkaListenerContainerFactory<Integer, VehiclePositionCoordinate>();
-
+        
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
         factory.setConsumerFactory(batchConsumerFactory());
         factory.setBatchListener(true);
         return factory;

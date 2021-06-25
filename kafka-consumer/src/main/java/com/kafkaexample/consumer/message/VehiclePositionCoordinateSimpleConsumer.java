@@ -37,8 +37,8 @@ public class VehiclePositionCoordinateSimpleConsumer {
             // Consume logic goes here
 
             // Simulates an error
-             if (vehiclePositionCoordinate.getXCoordinate() == 10)
-               throw new IllegalArgumentException();
+            // if (vehiclePositionCoordinate.getXCoordinate() == 10)
+            //   throw new IllegalArgumentException();
 
             acknowledgment.acknowledge();
         } catch (Exception e) {

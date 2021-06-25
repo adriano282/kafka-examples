@@ -34,9 +34,6 @@ public class KafkaProducerConfig {
     @Value("${spring.kafka.producer.properties.schema.registry.url}")
     private String SCHEMA_REGISTRY_CONFIG;
 
-    @Value("${spring.kafka.producer.linger_ms}")
-    private String LINGER_MS_CONFIG;
-
     @Value("${spring.kafka.producer.acks}")
     private String ACKS_CONFIG;
 
@@ -62,7 +59,6 @@ public class KafkaProducerConfig {
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER_CONFIG);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, KEY_SERIALIZER_CLASS_CONFIG);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, VALUE_SERIALIZER_CLASS_CONFIG);
-        props.put(ProducerConfig.LINGER_MS_CONFIG, LINGER_MS_CONFIG);
         props.put(ProducerConfig.ACKS_CONFIG, ACKS_CONFIG);
         props.put(ProducerConfig.RETRIES_CONFIG, RETRIES_CONFIG);
         props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, ENABLE_IDEMPOTENCE_CONFIG);

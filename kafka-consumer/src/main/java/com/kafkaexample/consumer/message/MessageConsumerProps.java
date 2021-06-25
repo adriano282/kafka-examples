@@ -37,7 +37,7 @@ public class MessageConsumerProps {
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, VALUE_DESERIALIZER_CLASS_CONFIG);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, AUTO_OFFSET_RESET_CONFIG);
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, ENABLE_AUTO_COMMIT_CONFIG);
-        props.put("specific.avro.reader", ENABLE_AUTO_COMMIT_CONFIG);
+        props.put("specific.avro.reader", true);
         props.put("schema.registry.url", SCHEMA_REGISTRY_CONFIG);
         return props;
     }

@@ -44,7 +44,7 @@ public class BatchConsumerProps {
         props.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG, String.valueOf(50 * 1024 * 1024));
         props.put(ConsumerConfig.FETCH_MIN_BYTES_CONFIG, String.valueOf(1024 * 2));
         props.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, String.valueOf(1000));
-        props.put("specific.avro.reader", SPECIFIC_AVRO_READER);
+        props.put("specific.avro.reader", true);
         props.put("schema.registry.url", SCHEMA_REGISTRY_CONFIG);
         return props;
     }

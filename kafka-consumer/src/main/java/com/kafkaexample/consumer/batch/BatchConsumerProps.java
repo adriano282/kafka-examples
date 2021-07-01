@@ -46,6 +46,13 @@ public class BatchConsumerProps {
         props.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, String.valueOf(1000));
         props.put("specific.avro.reader", true);
         props.put("schema.registry.url", SCHEMA_REGISTRY_CONFIG);
+        
+// For authenticating usind SASL SCRAM, set these properties:
+// Store and retrieve the password in a secure way
+// For the BOOTSTRAP_SERVER, use the protocol 'SASL_SSL://'
+//        props.put("sasl.jaas.config", "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"adriano\" password=\"adriano-secret\";");
+//        props.put("sasl.mechanism", "SCRAM-SHA-512");
+//        props.put("security.protocol", "SASL_SSL");
         return props;
     }
 }

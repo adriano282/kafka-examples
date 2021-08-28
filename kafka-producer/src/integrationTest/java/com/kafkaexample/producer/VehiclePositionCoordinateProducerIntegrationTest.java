@@ -13,15 +13,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @DirtiesContext
 @ComponentScan(basePackageClasses = {Main.class})
+@ActiveProfiles("integration-test")
 public class VehiclePositionCoordinateProducerIntegrationTest extends EnabledEmbeddedKafkaServer {
 
     @Autowired

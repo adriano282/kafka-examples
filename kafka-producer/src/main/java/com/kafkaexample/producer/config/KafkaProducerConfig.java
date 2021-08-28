@@ -17,7 +17,7 @@ import java.util.Map;
 @Configuration
 @EnableKafka
 @NoArgsConstructor
-@Profile(value = {"!test", "!integration-test"})
+@Profile(value = {"!test & !integration-test"})
 public class KafkaProducerConfig {
 
     @Value("${spring.kafka.producer.bootstrap-servers}")
